@@ -1083,7 +1083,7 @@ def get_global_logs(
                 index,
                 " - Ranking: ",
                 f"f{class_relevance}",
-                "x❌",
+                "❌",
             )
             insignificant.append(class_relevance)
         case (False, False):
@@ -1093,7 +1093,7 @@ def get_global_logs(
                 index,
                 " - Ranking: ",
                 f"f{class_relevance}",
-                "x❌",
+                "❌",
             )
             insignificant.append(class_relevance)
     return SelectedRelevances(
@@ -1145,7 +1145,7 @@ def get_relevance_logs(
                 " - Ranking: ",
                 f"prototype {index}.",
                 f"f{feature_label}",
-                "❌x",
+                "❌",
             )
             insignificant.append(feature_label)
         case (False, False):
@@ -1156,7 +1156,7 @@ def get_relevance_logs(
                 " - Ranking: ",
                 f"prototype {index}.",
                 f"f{feature_label}",
-                "x❌",
+                "❌",
             )
             insignificant.append(feature_label)
     return SelectedRelevances(
@@ -1485,7 +1485,6 @@ def seed_everything(seed: int):
 
 if __name__ == "__main__":
     seed_everything(seed=4)
-    # train_data = DATA(random=4)
     parser = argparse.ArgumentParser()
     parser.add_argument("--ppc", type=int, required=False, default=1)
     parser.add_argument("--dataset", type=str, required=False, default="ozone")
@@ -1529,7 +1528,6 @@ if __name__ == "__main__":
     proto_init = parser.parse_args().proto_init
     omega_init = parser.parse_args().omega_init
 
-    # import pandas as pd
     if dataset == "ozone":
         input_data, labels = get_ozone_data("./data_m/MADELON/eighthr.csv")
         num_classes = len(np.unique(labels))
