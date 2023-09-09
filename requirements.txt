@@ -1,15 +1,9 @@
-# upgrade to numpy > 1.20 after boruta was fixed and reflected on pypi
-# https://github.com/scikit-learn-contrib/boruta_py/issues/113
+
 numpy==1.23.5
 scikit-learn==1.2.2
 pandas==1.4.0
 imbalanced-learn==0.10.1
-Boruta==0.3
-plotly==5.14.1
-docopt==0.6.2
-xgboost==1.7.5
 torch==2.0.1
-skorch==0.13.0
 prototorch==0.7.5
 prototorch_models==0.5.4
 pytorch-lightning==2.0.2
