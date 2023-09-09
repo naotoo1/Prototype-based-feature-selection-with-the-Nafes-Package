@@ -1,5 +1,3 @@
-"""Mutation Validation for LVQ datasets"""
-
 from enum import Enum
 import random
 
