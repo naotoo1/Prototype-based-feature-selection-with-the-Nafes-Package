@@ -1529,7 +1529,7 @@ if __name__ == "__main__":
     omega_init = parser.parse_args().omega_init
 
     if dataset == "ozone":
-        input_data, labels = get_ozone_data("./data/MADELON/eighthr.csv")
+        input_data, labels = get_ozone_data("./data/eighthr.csv")
         num_classes = len(np.unique(labels))
         input_dim = input_data.shape[1]
         latent_dim = input_data.shape[1]
