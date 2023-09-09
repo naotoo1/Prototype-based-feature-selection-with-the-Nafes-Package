@@ -1,8 +1,8 @@
-# Nafes
+# Prototype-based Feature Selection with the Nafes Package
 [Nana A. Otoo](https://github.com/naotoo1)
 
 
-Nafes is an interface to of the prototype-based feature selection algorithm (under construction).
+code for the paper the prototype-based feature selection algorithm (under construction).
 
 
 ## Abstract
@@ -21,34 +21,27 @@ The details of the implementation and results evaluation can be found in the pap
 
 To install the Python requirements use the following command:
 
- ## Requirements
-
 ```python
 pip install -r requirements.txt 
 ```
 
-To replicate results in the paper run the default parameters:
+To replicate results for WDBC in the paper run the default parameters:
 
 ```python
-python train.py --dataset wdbc --model gmlvq 
-python train.py --dataset wdbc --model lgmlvq 
-python train.py --dataset ozone --model gmlvq
-python train.py --dataset ozone --model lgmlvq
+python train.py --dataset wdbc --model gmlvq --eval_type ho
+python train.py --dataset wdbc --model gmlvq --eval_type mv
+python train.py --dataset wdbc --model lgmlvq --eval_type ho --reject_options
+python train.py --dataset wdbc --model lgmlvq --eval_type mv --reject_options
 
 ```
- ## How to use
 
+To replicate results for Ozone Layer in the paper run the default parameter:
 ```python
-usage: prototype_feature_extractor.py [-h] [--ppc PPC] [--dataset DATASET] [--model MODEL] [--bs BS] [--lr LR] [--bb_lr BB_LR] [--eval_type EVAL_TYPE] [--epochs EPOCHS] [--verbose VERBOSE]
-                                      [--significance SIGNIFICANCE] [--norm_ord NORM_ORD] [--evaluation_metric EVALUATION_METRIC] [--perturbation_ratio PERTURBATION_RATIO] [--termination TERMINATION]
-                                      [--perturbation_distribution PERTURBATION_DISTRIBUTION] [--optimal_search OPTIMAL_SEARCH] [--reject_option REJECT_OPTION] [--epsilon EPSILON]
-                                      [--proto_init PROTO_INIT] [--omega_init OMEGA_INIT]
-
+python train.py --dataset ozone --model gmlvq --eval_type ho
+python train.py --dataset ozone --model gmlvq --eval_type mv
+python train.py --dataset ozone --model lgmlvq --eval_type ho --reject_options
+python train.py --dataset ozone --model lgmlvq --eval_type mv --reject_options
 
 ```
-Altenatively the prototype_feature_selection algorithm is part of Nafes package which is available at and can be intalled by 
-
-```python
-pip install nafes
-```
+ 
 
