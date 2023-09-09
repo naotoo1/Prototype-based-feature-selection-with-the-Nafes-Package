@@ -2,9 +2,6 @@
 [Nana A. Otoo](https://github.com/naotoo1)
 
 
-Nafes is an interface to of the prototype-based feature selection algorithm (under construction).
-
-
 ## Abstract
 This paper introduces Nafes as a prototype-based feature selection package designed as a wrapper
 centered on the highly interpretable and powerful Generalized Matrix Learning Vector Quantization
