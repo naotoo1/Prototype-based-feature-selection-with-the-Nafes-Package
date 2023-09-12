@@ -13,7 +13,7 @@ classifier decisions
 [https://vixra.org/abs/2308.0112](https://vixra.org/abs/2308.0112)
 
 
-The implementation requires Python 3.10 and above. The author recommends to use a virtual environment or Docker image.
+The implementation requires Python 3.11.5 and above. The author recommends to use a virtual environment or Docker image.
 The details of the implementation and results evaluation can be found in the paper.
 
 To install the Python requirements use the following command:
