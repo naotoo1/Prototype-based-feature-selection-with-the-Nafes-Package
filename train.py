@@ -647,7 +647,7 @@ class TM:
             counter += 1
             train_eval_scheme = (
                 self.train_mv(increment=counter)
-                if self.eval_type is ValidationType.MUTATEDVALIDATION.value
+                if self.eval_type == ValidationType.MUTATEDVALIDATION.value
                 else self.train_ho(increment=counter)
             )
             validation_score = (
@@ -798,13 +798,6 @@ class TM:
                     input_dim=self.input_dim,
                     num_classes=self.num_classes,
                 )
-                # reject_option = reject(
-                #     significant=summary.significant.features,
-                #     insignificant=summary.insignificant.features,
-                #     significant_hit=summary.significant.hits,
-                #     insignificant_hit=summary.insignificant.hits,
-                #     reject_options=True,
-                # )
 
                 visualize(
                     features=summary.significant.features,
@@ -1083,7 +1076,7 @@ def get_global_logs(
                 index,
                 " - Ranking: ",
                 f"f{class_relevance}",
-                "❌",
+                "x❌",
             )
             insignificant.append(class_relevance)
         case (False, False):
@@ -1093,7 +1086,7 @@ def get_global_logs(
                 index,
                 " - Ranking: ",
                 f"f{class_relevance}",
-                "❌",
+                "x❌",
             )
             insignificant.append(class_relevance)
     return SelectedRelevances(
@@ -1145,7 +1138,7 @@ def get_relevance_logs(
                 " - Ranking: ",
                 f"prototype {index}.",
                 f"f{feature_label}",
-                "❌",
+                "❌x",
             )
             insignificant.append(feature_label)
         case (False, False):
@@ -1156,7 +1149,7 @@ def get_relevance_logs(
                 " - Ranking: ",
                 f"prototype {index}.",
                 f"f{feature_label}",
-                "❌",
+                "x❌",
             )
             insignificant.append(feature_label)
     return SelectedRelevances(
@@ -1324,15 +1317,23 @@ def reject_strategy(
         index for index, value in enumerate(significant) if value in intersection
     ]
 
+    value_sig_conflicts = [
+        value for index, value in enumerate(significant) if value in intersection
+    ]
+
     index_insig_conflicts = [
         index for index, value in enumerate(insignificant) if value in intersection
     ]
 
-    significant_hits = [significant_hit[index] for index in index_sig_conflicts]
-    insignificant_hits = [insignificant_hit[index] for index in index_insig_conflicts]
+    significant_hits = [
+        significant_hit[index] for index in index_sig_conflicts
+    ]
+    insignificant_hits = [
+        insignificant_hit[index] for index in index_insig_conflicts
+    ]
 
     rejection_strategy = [
-        intersection[hit_index]
+        value_sig_conflicts[hit_index]
         for hit_index, hit in enumerate(significant_hits)
         if hit <= insignificant_hits[hit_index]
     ]
@@ -1368,8 +1369,7 @@ def reject_strategy(
         significant=significant,
         insignificant=insignificant,
         significant_hit=significant_hit,
-        insignificant_hit=insignificant_hit,
-    )
+        insignificant_hit=insignificant_hit)
 
 
 def reject(
@@ -1485,14 +1485,15 @@ def seed_everything(seed: int):
 
 if __name__ == "__main__":
     seed_everything(seed=4)
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--ppc", type=int, required=False, default=1)
-    parser.add_argument("--dataset", type=str, required=False, default="ozone")
-    parser.add_argument("--model", type=str, required=False, default='lgmlvq')
+    parser.add_argument("--dataset", type=str, required=False, default="wdbc")
+    parser.add_argument("--model", type=str, required=False, default=LVQ.GMLVQ)
     parser.add_argument("--bs", type=int, required=False, default=128)
     parser.add_argument("--lr", type=float, required=False, default=0.01)
     parser.add_argument("--bb_lr", type=float, required=False, default=0.01)
-    parser.add_argument("--eval_type", type=str, required=False, default='ho')
+    parser.add_argument("--eval_type", type=str, required=False, default="mv")
     parser.add_argument("--epochs", type=int, required=False, default=100)
     parser.add_argument("--verbose", type=int, required=False, default=1)
     parser.add_argument('--significance', action=argparse.BooleanOptionalAction, default=False)
@@ -1505,7 +1506,7 @@ if __name__ == "__main__":
     parser.add_argument('--reject_option', action=argparse.BooleanOptionalAction, default=False)
     parser.add_argument("--epsilon", type=float, required=False, default=0.05)
     parser.add_argument("--proto_init", type=str, required=False, default="SMCI")
-    parser.add_argument("--omega_init", type=str, required=False, default='OLTI')
+    parser.add_argument("--omega_init", type=str, required=False, default="OLTI")
 
     model = parser.parse_args().model
     eval_type = parser.parse_args().eval_type
@@ -1540,6 +1541,7 @@ if __name__ == "__main__":
         num_classes = len(np.unique(labels))
         input_dim = input_data.shape[1]
         latent_dim = input_data.shape[1]
+        proto_init = "MCI" if model == LVQ.GMLVQ.value else 'SMCI'
 
     else:
         raise NotImplementedError
@@ -1568,9 +1570,9 @@ if __name__ == "__main__":
     )
     summary = train.summary_results
 
-    summary_significant = summary.significant if model is LVQ.GMLVQ.value else summary.significant.features
-    summary_insignificant = summary.insignificant if model is LVQ.GMLVQ.value else summary.insignificant.features
-    summary_title = 'Summary' if model is LVQ.GMLVQ.value else 'Without rejection strategy'
+    summary_significant = summary.significant if model == LVQ.GMLVQ.value else summary.significant.features
+    summary_insignificant = summary.insignificant if model == LVQ.GMLVQ.value else summary.insignificant.features
+    summary_title = 'Summary' if model == LVQ.GMLVQ.value else 'Without rejection strategy'
 
     print(f'--------------------{summary_title}-------------------------')
     print(
@@ -1590,14 +1592,14 @@ if __name__ == "__main__":
         len(insignificant_features)
     )
 
-    if reject_option and model is LVQ.LGMLVQ.value:
+    if reject_option and model == LVQ.LGMLVQ.value:
         rejected_strategy = get_rejection_summary(
             significant=list(summary.significant.features),
             insignificant=list(summary.insignificant.features),
             significant_hit=list(summary.significant.hits),
             insignificant_hit=list(summary.insignificant.hits),
             reject_options=True,
-            vis=False,
+            vis=True,
         )
 
         tentative_features = set(significant_features) ^ set(rejected_strategy.significant)
@@ -1628,4 +1630,3 @@ if __name__ == "__main__":
             'tentative_features_size=',
             len(tentative_features)
         )
-
