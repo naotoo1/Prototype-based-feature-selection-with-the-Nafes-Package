@@ -1,6 +1,8 @@
 # Prototype-based Feature Selection with the Nafes Package
 [Nana A. Otoo](https://github.com/naotoo1)
 
+This repository contains the code for the paper Prototype-based Feature Selection with the Nafes Package (under construction)
+
 
 ## Abstract
 This paper introduces Nafes as a prototype-based feature selection package designed as a wrapper
