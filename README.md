@@ -29,8 +29,8 @@ To replicate results for WDBC in the paper run the default parameters:
 ```python
 python train.py --dataset wdbc --model gmlvq --eval_type ho
 python train.py --dataset wdbc --model gmlvq --eval_type mv
-python train.py --dataset wdbc --model lgmlvq --eval_type ho --reject_options
-python train.py --dataset wdbc --model lgmlvq --eval_type mv --reject_options
+python train.py --dataset wdbc --model lgmlvq --eval_type ho --reject_option
+python train.py --dataset wdbc --model lgmlvq --eval_type mv --reject_option
 
 ```
 
@@ -38,8 +38,8 @@ To replicate results for Ozone Layer in the paper run the default parameter:
 ```python
 python train.py --dataset ozone --model gmlvq --eval_type ho
 python train.py --dataset ozone --model gmlvq --eval_type mv
-python train.py --dataset ozone --model lgmlvq --eval_type ho --reject_options
-python train.py --dataset ozone --model lgmlvq --eval_type mv --reject_options
+python train.py --dataset ozone --model lgmlvq --eval_type ho --reject_option
+python train.py --dataset ozone --model lgmlvq --eval_type mv --reject_option
 
 ```
  
