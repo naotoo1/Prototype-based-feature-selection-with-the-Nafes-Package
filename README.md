@@ -1,6 +1,8 @@
 # Prototype-based Feature Selection with the Nafes Package
 [Nana A. Otoo](https://github.com/naotoo1)
 
+This repository contains the code for the paper Prototype-based Feature Selection with the Nafes Package (under construction)
+
 
 ## Abstract
 This paper introduces Nafes as a prototype-based feature selection package designed as a wrapper
@@ -13,7 +15,7 @@ classifier decisions
 [https://vixra.org/abs/2308.0112](https://vixra.org/abs/2308.0112)
 
 
-The implementation requires Python 3.10 and above. The author recommends to use a virtual environment or Docker image.
+The implementation requires Python 3.11.5 and above. The author recommends to use a virtual environment or Docker image.
 The details of the implementation and results evaluation can be found in the paper.
 
 To install the Python requirements use the following command:
@@ -27,8 +29,8 @@ To replicate results for WDBC in the paper run the default parameters:
 ```python
 python train.py --dataset wdbc --model gmlvq --eval_type ho
 python train.py --dataset wdbc --model gmlvq --eval_type mv
-python train.py --dataset wdbc --model lgmlvq --eval_type ho --reject_options
-python train.py --dataset wdbc --model lgmlvq --eval_type mv --reject_options
+python train.py --dataset wdbc --model lgmlvq --eval_type ho --reject_option
+python train.py --dataset wdbc --model lgmlvq --eval_type mv --reject_option
 
 ```
 
@@ -36,8 +38,8 @@ To replicate results for Ozone Layer in the paper run the default parameter:
 ```python
 python train.py --dataset ozone --model gmlvq --eval_type ho
 python train.py --dataset ozone --model gmlvq --eval_type mv
-python train.py --dataset ozone --model lgmlvq --eval_type ho --reject_options
-python train.py --dataset ozone --model lgmlvq --eval_type mv --reject_options
+python train.py --dataset ozone --model lgmlvq --eval_type ho --reject_option
+python train.py --dataset ozone --model lgmlvq --eval_type mv --reject_option
 
 ```
  
