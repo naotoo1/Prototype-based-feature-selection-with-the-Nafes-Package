@@ -84,6 +84,7 @@ class LocalRejectStrategy:
     insignificant: list[int]
     significant_hit: list[int]
     insignificant_hit: list[int]
+    tentative: list[int] | None
 
 
 @dataclass
@@ -1076,7 +1077,7 @@ def get_global_logs(
                 index,
                 " - Ranking: ",
                 f"f{class_relevance}",
-                "x❌",
+                "❌",
             )
             insignificant.append(class_relevance)
         case (False, False):
@@ -1086,7 +1087,7 @@ def get_global_logs(
                 index,
                 " - Ranking: ",
                 f"f{class_relevance}",
-                "x❌",
+                "❌",
             )
             insignificant.append(class_relevance)
     return SelectedRelevances(
@@ -1138,7 +1139,7 @@ def get_relevance_logs(
                 " - Ranking: ",
                 f"prototype {index}.",
                 f"f{feature_label}",
-                "❌x",
+                "❌",
             )
             insignificant.append(feature_label)
         case (False, False):
@@ -1149,7 +1150,7 @@ def get_relevance_logs(
                 " - Ranking: ",
                 f"prototype {index}.",
                 f"f{feature_label}",
-                "x❌",
+                "❌",
             )
             insignificant.append(feature_label)
     return SelectedRelevances(
@@ -1313,6 +1314,7 @@ def reject_strategy(
         insignificant_hit: list,
 ) -> LocalRejectStrategy:
     intersection = list(set(significant) & set(insignificant))
+
     index_sig_conflicts = [
         index for index, value in enumerate(significant) if value in intersection
     ]
@@ -1325,21 +1327,49 @@ def reject_strategy(
         index for index, value in enumerate(insignificant) if value in intersection
     ]
 
-    significant_hits = [
-        significant_hit[index] for index in index_sig_conflicts
-    ]
-    insignificant_hits = [
-        insignificant_hit[index] for index in index_insig_conflicts
+    value_insig_conflicts = [
+        value for index, value in enumerate(insignificant) if value in intersection
     ]
 
-    rejection_strategy = [
+    index_list, new_val_insig = [], []
+    for val_sig in value_sig_conflicts:
+        for index_value, value in enumerate(value_insig_conflicts):
+            if val_sig == value:
+                new_val_insig.append(value)
+                index_list.append(index_insig_conflicts[index_value])
+
+    significant_hits = [significant_hit[index] for index in index_sig_conflicts]
+
+    insignificant_hits = [insignificant_hit[index] for index in index_list]
+
+    rejection_strategy_significant = [
         value_sig_conflicts[hit_index]
         for hit_index, hit in enumerate(significant_hits)
         if hit <= insignificant_hits[hit_index]
     ]
 
+    rejection_strategy_insignificant = [
+        new_val_insig[hit_index]
+        for hit_index, hit in enumerate(insignificant_hits)
+        if hit < significant_hits[hit_index]
+    ]
+
+    tentative_strategy = [
+        value_sig_conflicts[hit_index]
+        for hit_index, hit in enumerate(significant_hits)
+        if hit == insignificant_hits[hit_index]
+    ]
+
     new_significant = [
-        feature for feature in significant if feature not in rejection_strategy
+        feature
+        for feature in significant
+        if feature not in rejection_strategy_significant
+    ]
+
+    new_insignificant = [
+        feature
+        for feature in insignificant
+        if feature not in rejection_strategy_insignificant
     ]
 
     new_significant_hit = [
@@ -1348,14 +1378,27 @@ def reject_strategy(
         if value in new_significant
     ]
 
+    new_insignificant_hit = [
+        insignificant_hit[index]
+        for index, value in enumerate(insignificant)
+        if value in new_insignificant
+    ]
+
     significant = significant if len(new_significant) == 0 else new_significant
+
+    insignificant = insignificant if len(new_insignificant) == 0 else new_insignificant
+
     significant_hit = (
         significant_hit if len(new_significant) == 0 else new_significant_hit
     )
 
+    insignificant_hit = (
+        insignificant_hit if len(new_insignificant) == 0 else new_insignificant_hit
+    )
+
     insignificant = [
         feature
-        for index, feature in enumerate(insignificant)
+        for _index, feature in enumerate(insignificant)
         if feature not in significant
     ]
 
@@ -1369,7 +1412,9 @@ def reject_strategy(
         significant=significant,
         insignificant=insignificant,
         significant_hit=significant_hit,
-        insignificant_hit=insignificant_hit)
+        insignificant_hit=insignificant_hit,
+        tentative=tentative_strategy,
+    )
 
 
 def reject(
@@ -1392,6 +1437,7 @@ def reject(
                 insignificant=strategy.insignificant,
                 significant_hit=strategy.significant_hit,
                 insignificant_hit=strategy.insignificant_hit,
+                tentative=strategy.tentative,
             )
         case False:
             return LocalRejectStrategy(
@@ -1399,6 +1445,7 @@ def reject(
                 insignificant,
                 significant_hit,
                 insignificant_hit,
+                None
             )
         case _:
             raise RuntimeError(
@@ -1448,6 +1495,7 @@ def get_rejection_summary(
         insignificant=rejected_summary.insignificant,
         significant_hit=rejected_summary.significant_hit,
         insignificant_hit=rejected_summary.insignificant_hit,
+        tentative=rejected_summary.tentative,
     )
 
 
@@ -1602,7 +1650,6 @@ if __name__ == "__main__":
             vis=True,
         )
 
-        tentative_features = set(significant_features) ^ set(rejected_strategy.significant)
         print("----------------------With reject_strategy----------------------------")
         print(
             'significant_features=',
@@ -1615,7 +1662,7 @@ if __name__ == "__main__":
 
         print(
             'tentative_features=',
-            tentative_features := list(tentative_features)
+            tentative_features := rejected_strategy.tentative
         )
 
         print(
