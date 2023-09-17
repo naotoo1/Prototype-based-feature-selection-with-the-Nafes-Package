@@ -12,7 +12,7 @@ Relevance evaluated by the mutation validation scheme for Learning Vector quanti
 which iteratively converges to selected features that relevantly contribute to the prototype-based
 classifier decisions
 
-[https://vixra.org/abs/2308.0112](https://vixra.org/abs/2308.0112)
+[https://vixra.org/abs/2309.0076](https://vixra.org/abs/2309.0076)
 
 
 The implementation requires Python 3.11.5 and above. The author recommends to use a virtual environment or Docker image.
