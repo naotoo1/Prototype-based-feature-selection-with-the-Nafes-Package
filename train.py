@@ -552,16 +552,6 @@ def save_train_model(
     except AttributeError:
         pass
 
-
-def get_numpy_as_tensor(
-        input_data: np.ndarray,
-        labels: np.ndarray,
-) -> TensorSet:
-    x_input = torch.from_numpy(input_data).to(torch.float32)
-    y_label = torch.from_numpy(labels).to(torch.float32)
-    return TensorSet(x_input, y_label)
-
-
 @dataclass(slots=True)
 class TM:
     input_data: np.ndarray
