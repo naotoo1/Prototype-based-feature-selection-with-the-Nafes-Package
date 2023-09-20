@@ -19,7 +19,6 @@ import torch
 import torch.linalg as ln
 from lightning_fabric.utilities.warnings import PossibleUserWarning
 from sklearn.metrics import accuracy_score
-from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import train_test_split
 from torch.utils import data
 from torch.utils.data import DataLoader
@@ -267,10 +266,6 @@ def train_hold_out(
         final_omega_matrix=omega_matrix,
         final_prototypes=prototypes,
     )  # type: ignore
-
-
-kfold = StratifiedKFold(n_splits=5, random_state=4, shuffle=True)
-mean_scores = []
 
 
 def train_model_by_mv(
