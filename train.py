@@ -153,12 +153,6 @@ class TrainModelSummary:
     final_prototypes: list[torch.Tensor]
 
 
-@dataclass
-class TensorSet:
-    data: torch.Tensor
-    labels: torch.Tensor
-
-
 def reset_weights(m):
     for layer in m.children():
         if hasattr(layer, "reset_parameters"):
