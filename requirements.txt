@@ -5,4 +5,4 @@ imbalanced-learn==0.10.1
 torch==2.2.0
 prototorch==0.7.5
 prototorch_models==0.5.4
-pytorch-lightning==2.0.2
+pytorch-lightning==2.4.0
